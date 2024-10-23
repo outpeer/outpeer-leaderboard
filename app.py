@@ -1,7 +1,7 @@
 import streamlit as st
 import gspread
 import json
-
+import os
 st.title("Outpeer Leaderboard")
 
 @st.cache_resource
@@ -13,7 +13,8 @@ def save_credentials():
         json.dump(credentials, f)
 
 # Save credentials to file
-save_credentials()
+if not os.path.exists("service_account.json"):
+    save_credentials()
 
 # Open the Google Sheet
 gc = gspread.service_account(filename="service_account.json")
