@@ -63,6 +63,56 @@ def pull_attendance_data(fetching_date: str):
         "AI": attendance_ai,
     }
 
+def get_rating_chart(min_score, max_score, student_score, student_rank, total_participants):
+    chart_data = pd.DataFrame({
+        'Category': ['Your Score'],
+        'Min': [min_score],
+        'Score': [student_score],
+        'Max': [max_score]
+    })
+
+    # Create the horizontal bar chart
+    fig = px.bar(chart_data, y='Category', x=['Min', 'Score', 'Max'], orientation='h',
+                 title='Your Score Compared to Min and Max',
+                 labels={'value': 'Score', 'variable': 'Type'},
+                 color_discrete_map={'Min': 'lightgrey', 'Score': 'green', 'Max': 'lightgrey'},
+                 height=200)
+
+    # Add ranking labels
+    fig.add_annotation(
+        x=min_score, 
+        y=0, 
+        text=f"Rank: {total_participants}", 
+        showarrow=False, 
+        yshift=-20
+    )
+    fig.add_annotation(
+        x=student_score, 
+        y=0, 
+        text=f"Your Rank: {int(student_rank)}", 
+        showarrow=False, 
+        yshift=20, 
+        font=dict(color="green")
+    )
+    fig.add_annotation(
+        x=max_score, 
+        y=0, 
+        text="Rank: 1", 
+        showarrow=False, 
+        yshift=-20
+    )
+
+    # Customize the layout
+    fig.update_layout(
+        showlegend=False,
+        xaxis_title="Score",
+        yaxis_title="",
+        yaxis_showticklabels=False,
+        margin=dict(l=0, r=0, t=40, b=0)
+    )
+
+    return fig
+
 map_course_to_label = {
     "DS": "Data Science",
     "DA": "Data Analytics",
@@ -87,8 +137,10 @@ attendance_data = pull_attendance_data(fetching_date)
 if course:
     leaderboard_df = leaderboard_data[course]
     attendance_df = attendance_data[course]
+    homework_df = homework_data[course]
     st.write(leaderboard_df)
     st.write(attendance_df)
+    st.write(homework_df)
 
 if student_id and course:
     leaderboard_df = leaderboard_data[course]
@@ -106,8 +158,8 @@ if student_id and course:
         st.error("Вас нет в лидерборде. Пожалуйста, проверьте правильность ввода ИИН или курса.")
         st.stop()
 
-    name_russian = leaderboard_df["ФИО"].values[0]
-    name_english = leaderboard_df["ФИО на латинице"].values[0]
+    name_russian = student_leaderboard_df["ФИО"].values[0]
+    name_english = student_leaderboard_df["ФИО на латинице"].values[0]
 
     if name_english != "":
         st.title(f"Результаты Вашего прогресса, {name_russian} ({name_english}). ")
@@ -119,7 +171,8 @@ if student_id and course:
 
     st.write("---")
     st.write("**Ваш текущий рейтинг:**")    
-    st.write(f"{student_leaderboard_rank} / общее количество участников: {len(leaderboard_df)}")
+    st.write(f"{int(student_leaderboard_rank)}")
+    st.write(f"Общее количество участников: {len(leaderboard_df)}")
 
     st.write("---")
 
@@ -129,6 +182,17 @@ if student_id and course:
     st.write(f"{max_leaderboard_score}")
     st.write("**Минимальный балл:**")
     st.write(f"{min_leaderboard_score}")
+
+    st.write("---")
+
+    fig = get_rating_chart(
+        min_leaderboard_score, 
+        max_leaderboard_score, 
+        student_leaderboard_score, 
+        student_leaderboard_rank, 
+        len(leaderboard_df)
+    )
+    st.plotly_chart(fig)
 
     st.write("---")
 
