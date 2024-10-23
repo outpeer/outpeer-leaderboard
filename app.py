@@ -183,10 +183,16 @@ if student_id and course:
     attendance_scores = student_attendance_df.iloc[0][col_dates_start_index:total_lessons+col_dates_start_index+1]
     attendance_scores = attendance_scores.tolist()
 
+    attendance_data = pd.DataFrame({
+        "Дата": lesson_dates,
+        "Баллы": attendance_scores,
+    })
+
     attendance_chart = px.bar(
-        x=[lesson_dates],
-        y=[attendance_scores],
-        labels={"x": "Дата", "y": "Баллы"},
+        attendance_data,
+        x="Дата",
+        y="Баллы",
+        title="Ваша посещаемость",
     )
 
     st.plotly_chart(attendance_chart)
