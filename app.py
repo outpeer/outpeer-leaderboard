@@ -65,50 +65,40 @@ def pull_attendance_data(fetching_date: str):
 
 def get_rating_chart(min_score, max_score, student_score, student_rank, total_participants):
     chart_data = pd.DataFrame({
-        'Category': ['Your Score'],
-        'Min': [min_score],
-        'Score': [student_score],
-        'Max': [max_score]
+        'Category': ['Max Score', 'Your Score', 'Min Score'],
+        'Score': [max_score, student_score, min_score],
+        'Rank': ['1', str(int(student_rank)), str(total_participants)]
     })
+    
+    # Sort the data by score in descending order
+    chart_data = chart_data.sort_values('Score', ascending=True)
 
     # Create the horizontal bar chart
-    fig = px.bar(chart_data, y='Category', x=['Min', 'Score', 'Max'], orientation='h',
+    fig = px.bar(chart_data, y='Category', x='Score', orientation='h',
                  title='Your Score Compared to Min and Max',
-                 labels={'value': 'Score', 'variable': 'Type'},
-                 color_discrete_map={'Min': 'lightgrey', 'Score': 'green', 'Max': 'lightgrey'},
-                 height=200)
+                 labels={'Score': 'Score', 'Category': 'Type'},
+                 color='Category',
+                 color_discrete_map={'Max Score': 'lightblue', 'Your Score': 'green', 'Min Score': 'lightgrey'},
+                 height=300)
 
-    # Add ranking labels
-    fig.add_annotation(
-        x=min_score, 
-        y=0, 
-        text=f"Rank: {total_participants}", 
-        showarrow=False, 
-        yshift=-20
-    )
-    fig.add_annotation(
-        x=student_score, 
-        y=0, 
-        text=f"Your Rank: {int(student_rank)}", 
-        showarrow=False, 
-        yshift=20, 
-        font=dict(color="green")
-    )
-    fig.add_annotation(
-        x=max_score, 
-        y=0, 
-        text="Rank: 1", 
-        showarrow=False, 
-        yshift=-20
-    )
+    # Add ranking labels on each bar
+    for i, row in chart_data.iterrows():
+        fig.add_annotation(
+            y=row['Category'],
+            x=row['Score'],
+            text=f"Rank: {row['Rank']}",
+            showarrow=False,
+            xshift=10,
+            font=dict(color="black", size=12)
+        )
 
     # Customize the layout
     fig.update_layout(
         showlegend=False,
-        xaxis_title="Score",
         yaxis_title="",
-        yaxis_showticklabels=False,
-        margin=dict(l=0, r=0, t=40, b=0)
+        xaxis_title="Score",
+        margin=dict(l=20, r=20, t=40, b=20),
+        yaxis=dict(autorange="reversed")  # This ensures the order is preserved
     )
 
     return fig
