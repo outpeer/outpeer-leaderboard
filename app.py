@@ -50,17 +50,11 @@ def pull_attendance_data(fetching_date: str):
     
     # Specify dtype for the "ИИН" column
     dtype_spec = {"ИИН": str}
-
-    def read_attendance_sheet(worksheet):
-        df = conn.read(worksheet=worksheet, dtype=dtype_spec)
-        # Combine multi-level columns
-        df.columns = [f"{col[0]}_{col[1]}" if isinstance(col, tuple) else col for col in df.columns]
-        return df
     
-    attendance_ds = read_attendance_sheet("Attendance DS TO24")
-    attendance_da = read_attendance_sheet("Attendance DA TO24")
-    attendance_pe = read_attendance_sheet("Attendance PE TO24")
-    attendance_ai = read_attendance_sheet("Attendance AI TO24")
+    attendance_ds = conn.read(worksheet="Attendance DS TO24", dtype=dtype_spec)
+    attendance_da = conn.read(worksheet="Attendance DA TO24", dtype=dtype_spec)
+    attendance_pe = conn.read(worksheet="Attendance PE TO24", dtype=dtype_spec)
+    attendance_ai = conn.read(worksheet="Attendance AI TO24", dtype=dtype_spec)
 
     return {
         "DS": attendance_ds,
