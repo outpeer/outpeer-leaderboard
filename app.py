@@ -163,6 +163,7 @@ if student_id and course:
     hw_scores = student_homework_df[hw_columns].iloc[0].values
     st.write(hw_scores)
     st.write([score for score in hw_scores if score is not None])
+    st.write(sum([score for score in hw_scores if score is not None]))
     hw_avg_score = sum([score for score in hw_scores if score is not None]) / count_homeworks
 
     hw_chart = px.bar(
