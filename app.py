@@ -198,7 +198,7 @@ if student_id and course:
 
     st.write("**Ваши домашние задания:**")
     hw_columns = [col for col in student_homework_df.columns if col.startswith("HW")]
-    hw_scores = student_attendance_df[hw_columns].iloc[0]
+    hw_scores = student_homework_df[hw_columns].iloc[0]
 
     fig = px.bar(x=hw_columns, y=hw_scores, labels={"x": "Домашние задания", "y": "Баллы"}, title="Ваши домашние задания")
     st.plotly_chart(fig)
