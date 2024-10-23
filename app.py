@@ -64,7 +64,7 @@ def pull_attendance_data(fetching_date: str):
     }
 
 def get_rating_chart(min_score, max_score, student_score, student_rank, total_participants):
-    leader_text = 'Лидер'
+    leader_text = 'Лидер #1'
     student_rating_text = f'Ваш рейтинг #{int(student_rank)}'
     last_place_text = f'Последнее место #{total_participants}'
     chart_data = pd.DataFrame({
