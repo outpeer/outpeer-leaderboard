@@ -157,6 +157,7 @@ if student_id and course:
     hw_columns = [col for col in student_homework_df.columns if col.startswith("HW")]
     hw_labels = [str(col[2:]) for col in hw_columns]
     hw_scores = student_homework_df[hw_columns].iloc[0]
+    hw_avg_score = hw_scores.mean()
 
     hw_chart = px.bar(
         x=hw_labels, 
@@ -165,6 +166,13 @@ if student_id and course:
         title="Ваши домашние задания",
     )
     hw_chart.update_layout(yaxis_range=[0, 100])
+    hw_chart.add_hline(
+        y=hw_avg_score,
+        line_dash="dash",
+        line_color="red",
+        annotation_text=f"Средний балл: {hw_avg_score:.2f}",
+        annotation_position="top right",
+    )
     st.plotly_chart(hw_chart)
 
     st.write("---")
@@ -183,9 +191,11 @@ if student_id and course:
     attendance_scores = student_attendance_df.iloc[0][col_dates_start_index:total_lessons+col_dates_start_index+1]
     attendance_scores = attendance_scores.tolist()
 
+    attendance_data = list(zip(lesson_dates, attendance_scores))
+
     attendance_data = pd.DataFrame({
-        "Дата": lesson_dates,
-        "Баллы": attendance_scores,
+        "Дата": [date for date, _ in attendance_data],
+        "Баллы": [score for _, score in attendance_data],
     })
 
     attendance_chart = px.bar(
