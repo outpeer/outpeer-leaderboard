@@ -110,6 +110,8 @@ course = st.selectbox(
 
 student_id = st.text_input("Ваш ИИН")
 
+st.write("---")
+
 fetching_date = datetime.now().strftime("%Y-%m-%d")
 leaderboard_data = pull_leaderboard_data(fetching_date)
 homework_data = pull_homework_data(fetching_date)
@@ -121,15 +123,7 @@ if course:
 
 if student_id and course:
     leaderboard_df = leaderboard_data[course]
-    homework_df = homework_data[course]
-    attendance_df = attendance_data[course]
-
-    max_leaderboard_score = leaderboard_df["Total score"].max()
-    min_leaderboard_score = leaderboard_df["Total score"].min()
-
     student_leaderboard_df = leaderboard_df[leaderboard_df["ИИН"] == student_id]
-    student_homework_df = homework_df[homework_df["ИИН"] == student_id]
-    student_attendance_df = attendance_df[attendance_df["ИИН"] == student_id]
 
     if student_leaderboard_df.empty:
         st.error("Вас нет в лидерборде. Пожалуйста, проверьте правильность ввода ИИН или курса.")
@@ -142,12 +136,12 @@ if student_id and course:
         st.subheader(f"Результаты Вашего прогресса, {name_russian} ({name_english}). ")
     else:
         st.subheader(f"Результаты Вашего прогресса, {name_russian}. ")
-
-    student_leaderboard_score = student_leaderboard_df["Total score"].values[0]
-    student_leaderboard_rank = student_leaderboard_df["Рейтинг"].values[0]
     
     st.write("---")
-
+    max_leaderboard_score = leaderboard_df["Total score"].max()
+    min_leaderboard_score = leaderboard_df["Total score"].min()
+    student_leaderboard_score = student_leaderboard_df["Total score"].values[0]
+    student_leaderboard_rank = student_leaderboard_df["Рейтинг"].values[0]
     rating_chart = get_rating_chart(
         min_leaderboard_score, 
         max_leaderboard_score, 
@@ -158,6 +152,8 @@ if student_id and course:
     st.plotly_chart(rating_chart)
 
     st.write("---")
+    homework_df = homework_data[course]
+    student_homework_df = homework_df[homework_df["ИИН"] == student_id]
     hw_columns = [col for col in student_homework_df.columns if col.startswith("HW")]
     hw_labels = [str(col[2:]) for col in hw_columns]
     hw_scores = student_homework_df[hw_columns].iloc[0]
@@ -170,3 +166,19 @@ if student_id and course:
     )
     hw_chart.update_layout(yaxis_range=[0, 100])
     st.plotly_chart(hw_chart)
+
+    st.write("---")
+    attendance_df = attendance_data[course]
+    col_dates_start_index = attendance_df.columns.get_loc("Week 1")
+    student_attendance_df = attendance_df[attendance_df["ИИН"] == student_id]
+    # get first row that contains dates
+    lesson_dates = attendance_df.iloc[0][col_dates_start_index:]
+    st.write(lesson_dates)
+    lesson_dates = lesson_dates[lesson_dates.notna()]
+    st.write(lesson_dates)
+    lesson_dates = lesson_dates.tolist()
+    st.write(lesson_dates)
+    lesson_dates = [date.strftime("%d.%m.%y") for date in lesson_dates]
+    st.write(lesson_dates)
+    total_lessons = len(lesson_dates)
+    st.write(total_lessons)
