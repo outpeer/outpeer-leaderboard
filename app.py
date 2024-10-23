@@ -196,7 +196,7 @@ if student_id and course:
 
     st.write("---")
     hw_columns = [col for col in student_homework_df.columns if col.startswith("HW")]
-    hw_labels = [col[3:] for col in hw_columns]
+    hw_labels = [str(col[2:]) for col in hw_columns]
     hw_scores = student_homework_df[hw_columns].iloc[0]
 
     fig = px.bar(
