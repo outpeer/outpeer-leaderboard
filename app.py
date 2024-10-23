@@ -1,4 +1,6 @@
 import streamlit as st
+import pandas as pd
+import plotly.express as px
 from datetime import datetime
 from streamlit_gsheets import GSheetsConnection
 st.title("Outpeer Leaderboard")
@@ -48,11 +50,17 @@ def pull_attendance_data(fetching_date: str):
     
     # Specify dtype for the "ИИН" column
     dtype_spec = {"ИИН": str}
+
+    def read_attendance_sheet(worksheet):
+        df = conn.read(worksheet=worksheet, dtype=dtype_spec)
+        # Combine multi-level columns
+        df.columns = [f"{col[0]}_{col[1]}" if isinstance(col, tuple) else col for col in df.columns]
+        return df
     
-    attendance_ds = conn.read(worksheet="Attendance DS TO24", dtype=dtype_spec)
-    attendance_da = conn.read(worksheet="Attendance DA TO24", dtype=dtype_spec)
-    attendance_pe = conn.read(worksheet="Attendance PE TO24", dtype=dtype_spec)
-    attendance_ai = conn.read(worksheet="Attendance AI TO24", dtype=dtype_spec)
+    attendance_ds = read_attendance_sheet("Attendance DS TO24")
+    attendance_da = read_attendance_sheet("Attendance DA TO24")
+    attendance_pe = read_attendance_sheet("Attendance PE TO24")
+    attendance_ai = read_attendance_sheet("Attendance AI TO24")
 
     return {
         "DS": attendance_ds,
@@ -69,12 +77,13 @@ map_course_to_label = {
 }
 
 course = st.selectbox(
-    "Курс на котором Вы обучаетесь", 
+    "Курс, на котором Вы обучаетесь", 
     ["DS", "DA", "PE", "AI"],
+    default=None,
     format_func=lambda x: map_course_to_label[x]
 )
 
-student_id = st.text_input("Введите Ваш ИИН")
+student_id = st.text_input("Ваш ИИН")
 
 fetching_date = datetime.now().strftime("%Y-%m-%d")
 leaderboard_data = pull_leaderboard_data(fetching_date)
@@ -83,12 +92,61 @@ attendance_data = pull_attendance_data(fetching_date)
 
 if course:
     leaderboard_df = leaderboard_data[course]
+    attendance_df = attendance_data[course]
     st.write(leaderboard_df)
+    st.write(attendance_df)
 
 if student_id and course:
-    leaderboard_df = leaderboard_data[course][leaderboard_data[course]["ИИН"] == student_id]
-    homework_df = homework_data[course][homework_data[course]["ИИН"] == student_id]
-    attendance_df = attendance_data[course][attendance_data[course]["ИИН"] == student_id]
+    leaderboard_df = leaderboard_data[course]
+    homework_df = homework_data[course]
+    attendance_df = attendance_data[course]
+
+    max_leaderboard_score = leaderboard_df["Total score"].max()
+    min_leaderboard_score = leaderboard_df["Total score"].min()
+
+    student_leaderboard_df = leaderboard_df[leaderboard_df["ИИН"] == student_id]
+    student_homework_df = homework_df[homework_df["ИИН"] == student_id]
+    student_attendance_df = attendance_df[attendance_df["ИИН"] == student_id]
+
+    if student_leaderboard_df.empty:
+        st.error("Вас нет в лидерборде. Пожалуйста, проверьте правильность ввода ИИН или курса.")
+        st.stop()
+
+    name_russian = leaderboard_df["ФИО"].values[0]
+    name_english = leaderboard_df["ФИО на латинице"].values[0]
+
+    if name_english != "":
+        st.title(f"Результаты Вашего прогресса, {name_russian} ({name_english}). ")
+    else:
+        st.title(f"Результаты Вашего прогресса, {name_russian}. ")
+
+    student_leaderboard_score = student_leaderboard_df["Total score"].values[0]
+    student_leaderboard_rank = student_leaderboard_df["Рейтинг"].values[0]
+
+    st.write("---")
+    st.write("**Ваш текущий рейтинг:**")    
+    st.write(f"{student_leaderboard_rank} / общее количество участников: {len(leaderboard_df)}")
+
+    st.write("---")
+
+    st.write("**Ваш текущий балл:**")
+    st.write(f"{student_leaderboard_score}")
+    st.write("**Максимальный балл:**")
+    st.write(f"{max_leaderboard_score}")
+    st.write("**Минимальный балл:**")
+    st.write(f"{min_leaderboard_score}")
+
+    st.write("---")
+
+    st.write("**Ваши домашние задания:**")
+    hw_columns = [col for col in student_homework_df.columns if col.startswith("HW")]
+    hw_scores = student_attendance_df[hw_columns].iloc[0]
+
+    fig = px.bar(x=hw_columns, y=hw_scores, labels={"x": "Домашние задания", "y": "Баллы"}, title="Ваши домашние задания")
+    st.plotly_chart(fig)
+
+    st.write("---")
+
 
     st.dataframe(leaderboard_df)
     st.dataframe(homework_df)
