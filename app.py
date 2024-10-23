@@ -206,10 +206,3 @@ if student_id and course:
     )
     fig.update_layout(yaxis_range=[0, 100])
     st.plotly_chart(fig)
-
-    st.write("---")
-
-
-    st.dataframe(leaderboard_df)
-    st.dataframe(homework_df)
-    st.dataframe(attendance_df)
