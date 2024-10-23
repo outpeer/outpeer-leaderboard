@@ -173,12 +173,16 @@ if student_id and course:
     student_attendance_df = attendance_df[attendance_df["ИИН"] == student_id]
     # get first row that contains dates
     lesson_dates = attendance_df.iloc[0][col_dates_start_index:]
-    st.write(lesson_dates)
     lesson_dates = lesson_dates[lesson_dates.notna()]
-    st.write(lesson_dates)
     lesson_dates = lesson_dates.tolist()
-    st.write(lesson_dates)
-    lesson_dates = [date.strftime("%d.%m.%y") for date in lesson_dates]
+    # "05.10.24" -> convert to datetime
+    lesson_dates = [datetime.strptime(date, "%d.%m.%y") for date in lesson_dates]
     st.write(lesson_dates)
     total_lessons = len(lesson_dates)
-    st.write(total_lessons)
+
+    # get attendance scores from student_attendance_df based on col_dates_start_index
+    attendance_scores = student_attendance_df.iloc[0][col_dates_start_index:total_lessons+col_dates_start_index+1]
+    attendance_scores = attendance_scores.tolist()
+    st.write(attendance_scores)
+
+    st.write(list(zip(lesson_dates, attendance_scores)))
