@@ -78,7 +78,7 @@ def get_rating_chart(min_score, max_score, student_score, student_rank, total_pa
     # Create the horizontal bar chart
     fig = px.bar(chart_data, y='Category', x='Score', orientation='h',
                  title='Ваше место в рейтинге',
-                 labels={'Score': 'Балл', 'Category': 'Тип'},
+                 labels={'Score': 'Балл', 'Category': ''},
                  color='Category',
                  color_discrete_map={leader_text: 'lightgrey', student_rating_text: 'red', last_place_text: 'lightgrey'},
                  height=300)
