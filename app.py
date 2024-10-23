@@ -1,22 +1,12 @@
 import streamlit as st
-import gspread
 import json
 import os
+from streamlit_gsheets import GSheetsConnection
 st.title("Outpeer Leaderboard")
 
-@st.cache_resource
-def save_credentials():
-    credentials = st.secrets["gcp_service_account"]
+st.title("Read Google Sheet as DataFrame")
 
-    # Save credentials to file
-    with open("service_account.json", "w") as f:
-        json.dump(credentials, f)
+conn = st.connection("gsheets", type=GSheetsConnection)
+df = conn.read(worksheet="LeaderBoard DS TO24")
 
-# Save credentials to file
-if not os.path.exists("service_account.json"):
-    save_credentials()
-
-# Open the Google Sheet
-gc = gspread.service_account(filename="service_account.json")
-sh = gc.open("Leader Board outpeer.kz courses")
-
+st.dataframe(df)
