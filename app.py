@@ -1,19 +1,16 @@
 import streamlit as st
-from google.oauth2 import service_account
 import gspread
+import json
 
 st.title("Outpeer Leaderboard")
 
 @st.cache_resource
 def save_credentials():
-    # Create credentials object
-    credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"]
-    )
+    credentials = st.secrets["gcp_service_account"]
 
     # Save credentials to file
     with open("service_account.json", "w") as f:
-        f.write(credentials.to_json())
+        json.dump(credentials, f)
 
 # Save credentials to file
 save_credentials()
