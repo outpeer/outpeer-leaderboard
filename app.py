@@ -86,8 +86,8 @@ def get_rating_chart(min_score, max_score, student_score, student_rank, total_pa
     # Customize the layout
     fig.update_layout(
         showlegend=False,
-        yaxis_title="",
-        xaxis_title="Score",
+        #yaxis_title="",
+        #xaxis_title="Score",
         margin=dict(l=20, r=20, t=40, b=20),
         yaxis=dict(autorange="reversed")  # This ensures the order is preserved
     )
