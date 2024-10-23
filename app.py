@@ -210,7 +210,7 @@ if student_id and course:
         title="Ваша посещаемость",
     )
 
-    attendance_chart.update_layout(yaxis_range=[0, 100])
+    attendance_chart.update_layout(yaxis_range=[0, 1])
     attendance_chart.add_hline(
         y=attendance_avg_score,
         line_dash="dash",
