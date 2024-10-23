@@ -28,10 +28,10 @@ def pull_leaderboard_data(fetching_date: str):
 def pull_homework_data(fetching_date: str):
     print(f"Fetching homework data for {fetching_date}")
     conn = get_connection()
-    homework_ds = conn.read(worksheet="Homework DS TO24")
-    homework_da = conn.read(worksheet="Homework DA TO24")
-    homework_pe = conn.read(worksheet="Homework PE TO24")
-    homework_ai = conn.read(worksheet="Homework AI TO24")
+    homework_ds = conn.read(worksheet="HW DS TO24")
+    homework_da = conn.read(worksheet="HW DA TO24")
+    homework_pe = conn.read(worksheet="HW PE TO24")
+    homework_ai = conn.read(worksheet="HW AI TO24")
     return {
         "DS": homework_ds,
         "DA": homework_da,
