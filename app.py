@@ -1,6 +1,4 @@
 import streamlit as st
-import json
-import os
 from datetime import datetime
 from streamlit_gsheets import GSheetsConnection
 st.title("Outpeer Leaderboard")
@@ -13,16 +11,11 @@ def get_connection():
 def pull_leaderboard_data(fetching_date: str):
     print(f"Fetching leaderboard data for {fetching_date}")
     conn = get_connection()
-    leaderboard_ds = conn.read(worksheet="LeaderBoard DS TO24")
-    leaderboard_da = conn.read(worksheet="LeaderBoard DA TO24")
-    leaderboard_pe = conn.read(worksheet="LeaderBoard PE TO24")
-    leaderboard_ai = conn.read(worksheet="LeaderBoard AI TO24")
-
-    # convert column X to string
-    leaderboard_ds["ИИН"] = leaderboard_ds["ИИН"].astype(str)
-    leaderboard_da["ИИН"] = leaderboard_da["ИИН"].astype(str)
-    leaderboard_pe["ИИН"] = leaderboard_pe["ИИН"].astype(str)
-    leaderboard_ai["ИИН"] = leaderboard_ai["ИИН"].astype(str)
+    dtype_spec = {"ИИН": str}
+    leaderboard_ds = conn.read(worksheet="LeaderBoard DS TO24", dtype=dtype_spec)
+    leaderboard_da = conn.read(worksheet="LeaderBoard DA TO24", dtype=dtype_spec)
+    leaderboard_pe = conn.read(worksheet="LeaderBoard PE TO24", dtype=dtype_spec)
+    leaderboard_ai = conn.read(worksheet="LeaderBoard AI TO24", dtype=dtype_spec)
 
     return {
         "DS": leaderboard_ds,
@@ -35,16 +28,11 @@ def pull_leaderboard_data(fetching_date: str):
 def pull_homework_data(fetching_date: str):
     print(f"Fetching homework data for {fetching_date}")
     conn = get_connection()
-    homework_ds = conn.read(worksheet="HW DS TO24")
-    homework_da = conn.read(worksheet="HW DA TO24")
-    homework_pe = conn.read(worksheet="HW PE TO24")
-    homework_ai = conn.read(worksheet="HW AI TO24")
-
-    # convert column X to string
-    homework_ds["ИИН"] = homework_ds["ИИН"].astype(str)
-    homework_da["ИИН"] = homework_da["ИИН"].astype(str)
-    homework_pe["ИИН"] = homework_pe["ИИН"].astype(str)
-    homework_ai["ИИН"] = homework_ai["ИИН"].astype(str)
+    dtype_spec = {"ИИН": str}
+    homework_ds = conn.read(worksheet="HW DS TO24", dtype=dtype_spec)
+    homework_da = conn.read(worksheet="HW DA TO24", dtype=dtype_spec)
+    homework_pe = conn.read(worksheet="HW PE TO24", dtype=dtype_spec)
+    homework_ai = conn.read(worksheet="HW AI TO24", dtype=dtype_spec)
 
     return {
         "DS": homework_ds,
@@ -57,16 +45,14 @@ def pull_homework_data(fetching_date: str):
 def pull_attendance_data(fetching_date: str):
     print(f"Fetching attendance data for {fetching_date}")
     conn = get_connection()
-    attendance_ds = conn.read(worksheet="Attendance DS TO24")
-    attendance_da = conn.read(worksheet="Attendance DA TO24")
-    attendance_pe = conn.read(worksheet="Attendance PE TO24")
-    attendance_ai = conn.read(worksheet="Attendance AI TO24")
-
-    # convert column X to string
-    attendance_ds["ИИН"] = attendance_ds["ИИН"].astype(str)
-    attendance_da["ИИН"] = attendance_da["ИИН"].astype(str)
-    attendance_pe["ИИН"] = attendance_pe["ИИН"].astype(str)
-    attendance_ai["ИИН"] = attendance_ai["ИИН"].astype(str)
+    
+    # Specify dtype for the "ИИН" column
+    dtype_spec = {"ИИН": str}
+    
+    attendance_ds = conn.read(worksheet="Attendance DS TO24", dtype=dtype_spec)
+    attendance_da = conn.read(worksheet="Attendance DA TO24", dtype=dtype_spec)
+    attendance_pe = conn.read(worksheet="Attendance PE TO24", dtype=dtype_spec)
+    attendance_ai = conn.read(worksheet="Attendance AI TO24", dtype=dtype_spec)
 
     return {
         "DS": attendance_ds,
