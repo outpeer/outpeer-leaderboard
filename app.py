@@ -155,7 +155,7 @@ if student_id and course:
     homework_df = homework_data[course]
     hw_columns = [col for col in homework_df.columns if col.startswith("HW")]
     # drop columns that have all null values (no homework submitted)
-    count_homeworks = len(homework_df[hw_columns].dropna(axis=1).columns)
+    count_homeworks = len(homework_df[hw_columns].dropna(axis=1, how="all").columns)
     st.write(f"Выполнено {count_homeworks} домашних заданий")
 
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
@@ -196,17 +196,27 @@ if student_id and course:
     attendance_scores = attendance_scores.tolist()
 
     attendance_data = list(zip(lesson_dates, attendance_scores))
-
     attendance_data = pd.DataFrame({
-        "Дата": [date for date, _ in attendance_data],
-        "Баллы": [score for _, score in attendance_data],
+        "dates": [date for date, _ in attendance_data],
+        "scores": [score for _, score in attendance_data],
     })
+    attendance_avg_score = attendance_data["scores"].mean()
 
     attendance_chart = px.bar(
         attendance_data,
-        x="Дата",
-        y="Баллы",
+        x="dates",
+        y="scores",
+        labels={"x": "Дата", "y": "Баллы"},
         title="Ваша посещаемость",
+    )
+
+    attendance_chart.update_layout(yaxis_range=[0, 100])
+    attendance_chart.add_hline(
+        y=attendance_avg_score,
+        line_dash="dash",
+        line_color="red",
+        annotation_text=f"Средний балл: {attendance_avg_score:.2f}",
+        annotation_position="top right",
     )
 
     st.plotly_chart(attendance_chart)
