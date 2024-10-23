@@ -116,12 +116,8 @@ homework_data = pull_homework_data(fetching_date)
 attendance_data = pull_attendance_data(fetching_date)
 
 if course:
-    leaderboard_df = leaderboard_data[course]
     attendance_df = attendance_data[course]
-    homework_df = homework_data[course]
-    st.write(leaderboard_df)
     st.write(attendance_df)
-    st.write(homework_df)
 
 if student_id and course:
     leaderboard_df = leaderboard_data[course]
@@ -143,48 +139,34 @@ if student_id and course:
     name_english = student_leaderboard_df["ФИО на латинице"].values[0]
 
     if name_english != "":
-        st.title(f"Результаты Вашего прогресса, {name_russian} ({name_english}). ")
+        st.subheader(f"Результаты Вашего прогресса, {name_russian} ({name_english}). ")
     else:
-        st.title(f"Результаты Вашего прогресса, {name_russian}. ")
+        st.subheader(f"Результаты Вашего прогресса, {name_russian}. ")
 
     student_leaderboard_score = student_leaderboard_df["Total score"].values[0]
     student_leaderboard_rank = student_leaderboard_df["Рейтинг"].values[0]
-
-    st.write("---")
-    st.write("**Ваш текущий рейтинг:**")    
-    st.write(f"{int(student_leaderboard_rank)}")
-    st.write(f"Общее количество участников: {len(leaderboard_df)}")
-
+    
     st.write("---")
 
-    st.write("**Ваш текущий балл:**")
-    st.write(f"{student_leaderboard_score}")
-    st.write("**Максимальный балл:**")
-    st.write(f"{max_leaderboard_score}")
-    st.write("**Минимальный балл:**")
-    st.write(f"{min_leaderboard_score}")
-
-    st.write("---")
-
-    fig = get_rating_chart(
+    rating_chart = get_rating_chart(
         min_leaderboard_score, 
         max_leaderboard_score, 
         student_leaderboard_score, 
         student_leaderboard_rank, 
         len(leaderboard_df)
     )
-    st.plotly_chart(fig)
+    st.plotly_chart(rating_chart)
 
     st.write("---")
     hw_columns = [col for col in student_homework_df.columns if col.startswith("HW")]
     hw_labels = [str(col[2:]) for col in hw_columns]
     hw_scores = student_homework_df[hw_columns].iloc[0]
 
-    fig = px.bar(
+    hw_chart = px.bar(
         x=hw_labels, 
         y=hw_scores, 
         labels={"x": "Домашние задания", "y": "Баллы"}, 
         title="Ваши домашние задания",
     )
-    fig.update_layout(yaxis_range=[0, 100])
-    st.plotly_chart(fig)
+    hw_chart.update_layout(yaxis_range=[0, 100])
+    st.plotly_chart(hw_chart)
