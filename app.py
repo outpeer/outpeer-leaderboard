@@ -80,7 +80,7 @@ course = st.selectbox(
     "Курс, на котором Вы обучаетесь", 
     [None, "DS", "DA", "PE", "AI"],
     index=0,
-    format_func=lambda x: map_course_to_label[x] if x else None
+    format_func=lambda x: map_course_to_label[x] if x else ""
 )
 
 student_id = st.text_input("Ваш ИИН")
