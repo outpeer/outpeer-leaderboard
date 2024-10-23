@@ -64,10 +64,12 @@ def pull_attendance_data(fetching_date: str):
     }
 
 def get_rating_chart(min_score, max_score, student_score, student_rank, total_participants):
+    leader_text = 'Лидер'
+    student_rating_text = f'Ваш рейтинг #({int(student_rank)})'
+    last_place_text = f'Последнее место #({total_participants})'
     chart_data = pd.DataFrame({
-        'Category': ['Max Score', 'Your Score', 'Min Score'],
+        'Category': [leader_text, student_rating_text, last_place_text],
         'Score': [max_score, student_score, min_score],
-        'Rank': ['1', str(int(student_rank)), str(total_participants)]
     })
     
     # Sort the data by score in descending order
@@ -75,22 +77,11 @@ def get_rating_chart(min_score, max_score, student_score, student_rank, total_pa
 
     # Create the horizontal bar chart
     fig = px.bar(chart_data, y='Category', x='Score', orientation='h',
-                 title='Your Score Compared to Min and Max',
-                 labels={'Score': 'Score', 'Category': 'Type'},
+                 title='Ваше место в рейтинге',
+                 labels={'Score': 'Балл', 'Category': 'Тип'},
                  color='Category',
-                 color_discrete_map={'Max Score': 'lightblue', 'Your Score': 'green', 'Min Score': 'lightgrey'},
+                 color_discrete_map={leader_text: 'lightgrey', student_rating_text: 'red', last_place_text: 'lightgrey'},
                  height=300)
-
-    # Add ranking labels on each bar
-    for i, row in chart_data.iterrows():
-        fig.add_annotation(
-            y=row['Category'],
-            x=row['Score'],
-            text=f"Rank: {row['Rank']}",
-            showarrow=False,
-            xshift=10,
-            font=dict(color="black", size=12)
-        )
 
     # Customize the layout
     fig.update_layout(
