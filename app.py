@@ -153,11 +153,15 @@ if student_id and course:
 
     st.write("---")
     homework_df = homework_data[course]
+    hw_columns = [col for col in homework_df.columns if col.startswith("HW")]
+    # drop columns that have all null values (no homework submitted)
+    count_homeworks = len(homework_df[hw_columns].dropna(axis=1).columns)
+    st.write(f"Выполнено {count_homeworks} домашних заданий")
+
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
-    hw_columns = [col for col in student_homework_df.columns if col.startswith("HW")]
     hw_labels = [str(col[2:]) for col in hw_columns]
     hw_scores = student_homework_df[hw_columns].iloc[0]
-    hw_avg_score = hw_scores.mean()
+    hw_avg_score = sum(hw_scores) / count_homeworks
 
     hw_chart = px.bar(
         x=hw_labels, 
