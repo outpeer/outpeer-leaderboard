@@ -184,7 +184,7 @@ if student_id and course:
         title="Ваши домашние задания",
         barmode="group",
     )
-    hw_chart.update_layout(yaxis_range=[0, 100])
+    hw_chart.update_layout(yaxis_range=[0, 100], margin=dict(l=20, r=20, t=40, b=20))
     hw_chart.add_hline(
         y=hw_avg_score,
         line_dash="dash",
