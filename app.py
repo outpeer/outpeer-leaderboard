@@ -64,7 +64,7 @@ def display_rating_chart(leaderboard_df, student_leaderboard_df):
     rank = student_leaderboard_df["Рейтинг"].values[0]
     chart = get_rating_chart(min_score, max_score, score, rank, len(leaderboard_df))
 
-    if rank < len(leaderboard_df) // 2:
+    if int(rank) < len(leaderboard_df) // 2:
         st.balloons()
     else:
         st.snow()
