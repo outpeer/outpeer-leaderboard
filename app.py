@@ -210,8 +210,10 @@ if student_id and course:
     lesson_dates = lesson_dates.tolist()
     lesson_dates = [datetime.strptime(date, "%d.%m.%y") for date in lesson_dates]
     total_lessons = len(lesson_dates)
+    st.write(student_attendance_df)
     attendance_scores = student_attendance_df.iloc[0][col_dates_start_index:total_lessons+col_dates_start_index+1]
     attendance_scores = attendance_scores.tolist()
+    st.write(attendance_scores)
     attendance_data = list(zip(lesson_dates, attendance_scores))
     attendance_data = pd.DataFrame({
         "dates": [date for date, _ in attendance_data],
