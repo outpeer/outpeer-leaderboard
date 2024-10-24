@@ -228,11 +228,10 @@ if student_id and course:
         labels={"dates": "Дата уроков", "scores": ""},
         title="Ваша посещаемость",
         markers=True,
-        marker_size=10,
         symbol="present",
         symbol_map={0: "x", 1: "circle", 0.5: "triangle-up"},
     )
-
+    attendance_chart.update_traces(marker=dict(size=10))
     attendance_chart.update_layout(yaxis_range=[0, 1])
     attendance_chart.add_hline(
         y=attendance_avg_score,
