@@ -219,7 +219,7 @@ if student_id and course:
     })
     attendance_avg_score = sum([score for score in attendance_data["scores"] if not pd.isna(score)]) / len(attendance_data)
 
-    attendance_chart = px.scatter(
+    attendance_chart = px.area(
         attendance_data,
         x="dates",
         y="scores",
@@ -230,7 +230,7 @@ if student_id and course:
     attendance_chart.update_layout(yaxis_range=[0, 1])
     attendance_chart.add_hline(
         y=attendance_avg_score,
-        line_dash="dash",
+        line_dash="solid",
         line_color="red",
         annotation_text=f"Средняя посещаемость: {100 * attendance_avg_score:.0f}%",
         annotation_position="top right",
