@@ -227,8 +227,9 @@ if student_id and course:
         y="scores",
         labels={"dates": "Дата уроков", "scores": ""},
         title="Ваша посещаемость",
-        markers=True,
         marker_size=10,
+        symbol="present",
+        symbol_map={0: "x", 1: "circle", 0.5: "triangle-up"},
     )
 
     attendance_chart.update_layout(yaxis_range=[0, 1])
