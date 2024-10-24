@@ -165,12 +165,12 @@ if student_id and course:
     hw_student_data = pd.DataFrame({
         "labels": hw_labels,
         "scores": hw_scores,
-        "type": ["student"] * len(hw_labels),
+        "type": ["Ваш балл"] * len(hw_labels),
     })
     hw_class_data = pd.DataFrame({
         "labels": hw_labels,
         "scores": hw_avg_scores,
-        "type": ["class"] * len(hw_labels),
+        "type": ["Класс"] * len(hw_labels),
     })
     hw_data = pd.concat([hw_class_data, hw_student_data])
     hw_chart = px.bar(
@@ -178,13 +178,13 @@ if student_id and course:
         x="labels", 
         y="scores",
         color="type",
-        color_discrete_map={"student": "blue", "class": "lightgrey"},
-        category_orders={"type": ["class", "student"]},
-        labels={"labels": "Домашние задания", "scores": ""}, 
+        color_discrete_map={"Ваш балл": "blue", "Класс": "lightgrey"},
+        category_orders={"type": ["Класс", "Ваш балл"]},
+        labels={"labels": "Домашние задания", "scores": "", "type": "Класс/Ваш балл"}, 
         title="Ваши домашние задания",
         barmode="group",
     )
-    hw_chart.update_layout(yaxis_range=[0, 100], margin=dict(l=20, r=20, t=40, b=20))
+    hw_chart.update_layout(yaxis_range=[0, 100])
     hw_chart.add_hline(
         y=hw_avg_score,
         line_dash="dash",
