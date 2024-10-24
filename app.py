@@ -159,9 +159,6 @@ if student_id and course:
         hw_avg_score for hw_avg_score in hw_avg_scores
     ] + [None] * (len(hw_columns) - len(hw_avg_scores))
 
-    st.write(hw_avg_scores)
-    st.write(hw_avg_scores.values)
-
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
     hw_labels = [str(col[2:]) for col in hw_columns]
     hw_scores = student_homework_df[hw_columns].iloc[0].values
