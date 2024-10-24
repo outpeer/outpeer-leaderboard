@@ -24,7 +24,7 @@ def get_connection():
 def pull_data(data_type: str, fetching_date: str):
     print(f"Fetching {data_type} data for {fetching_date}")
     conn = get_connection()
-    dtype_spec = {"ИИН": str, "Рейтинг": int}
+    dtype_spec = {"ИИН": str}
     return {
         course: conn.read(worksheet=f"{data_type} {course} TO24", dtype=dtype_spec)
         for course in COURSES
@@ -174,18 +174,15 @@ if student_id and course:
     except Exception as e:
         print(f"Error displaying rating chart: {e}")
         st.error("Ошибка при отображении графика рейтинга. Пожалуйста, обратитесь к администратору.")
-        st.error(e)
     st.write("---")
     try:
         display_homework_chart(homework_data[course], student_id)
     except Exception as e:
         print(f"Error displaying homework chart: {e}")
         st.error("Ошибка при отображении графика домашних заданий. Пожалуйста, обратитесь к администратору.")
-        st.error(e)
     st.write("---")
     try:
         display_attendance_chart(attendance_data[course], student_id)
     except Exception as e:
         print(f"Error displaying attendance chart: {e}")
         st.error("Ошибка при отображении графика посещаемости. Пожалуйста, обратитесь к администратору.")
-        st.error(e)
