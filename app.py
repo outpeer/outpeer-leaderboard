@@ -41,6 +41,7 @@ def get_rating_chart(min_score, max_score, student_score, student_rank, total_pa
                  title='Ваше место в рейтинге',
                  labels={'Score': 'Балл', 'Category': ''},
                  color='Category',
+                 category_orders={'Category': ['Лидер #1', f'Ваш рейтинг #{int(student_rank)}', f'Последнее место #{total_participants}']},
                  color_discrete_map={'Лидер #1': 'lightgrey', f'Ваш рейтинг #{int(student_rank)}': 'red', f'Последнее место #{total_participants}': 'lightgrey'},
                  height=300)
 
