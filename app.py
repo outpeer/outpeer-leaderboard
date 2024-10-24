@@ -131,6 +131,7 @@ if student_id and course:
     else:
         st.subheader(f"{name_russian}. ")
     
+    st.write("---")
     max_leaderboard_score = leaderboard_df["Total score"].max()
     min_leaderboard_score = leaderboard_df["Total score"].min()
     student_leaderboard_score = student_leaderboard_df["Total score"].values[0]
