@@ -156,7 +156,6 @@ if student_id and course:
     hw_columns = [col for col in homework_df.columns if col.startswith("HW")]
     # drop columns that have all null values (no homework submitted)
     count_homeworks = len(homework_df[hw_columns].dropna(axis=1, how="all").columns)
-    st.write(f"Выполнено {count_homeworks} домашних заданий")
 
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
     hw_labels = [str(col[2:]) for col in hw_columns]
