@@ -63,6 +63,11 @@ def display_rating_chart(leaderboard_df, student_leaderboard_df):
     score = student_leaderboard_df["Total score"].values[0]
     rank = student_leaderboard_df["Рейтинг"].values[0]
     chart = get_rating_chart(min_score, max_score, score, rank, len(leaderboard_df))
+
+    if rank < len(leaderboard_df):
+        st.balloons()
+    else:
+        st.snow()
     st.plotly_chart(chart)
 
 def display_homework_chart(homework_df, student_id):
