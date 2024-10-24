@@ -154,7 +154,7 @@ if student_id and course:
     relevant_homework_df = homework_df[hw_columns].dropna(axis=1, how="all")
     count_homeworks = len(relevant_homework_df.columns)
     hw_avg_score_class = (relevant_homework_df.sum(axis=1) / count_homeworks).mean()
-    hw_avg_scores = relevant_homework_df.mean(axis=0).iloc[0].values
+    hw_avg_scores = relevant_homework_df.mean(axis=0).iloc[0]
 
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
     hw_labels = [str(col[2:]) for col in hw_columns]
