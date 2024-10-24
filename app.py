@@ -86,8 +86,6 @@ def get_rating_chart(min_score, max_score, student_score, student_rank, total_pa
     # Customize the layout
     fig.update_layout(
         showlegend=False,
-        #yaxis_title="",
-        #xaxis_title="Score",
         margin=dict(l=20, r=20, t=40, b=20),
         yaxis=dict(autorange="reversed")  # This ensures the order is preserved
     )
@@ -119,6 +117,7 @@ attendance_data = pull_attendance_data(fetching_date)
 
 if student_id and course:
     leaderboard_df = leaderboard_data[course]
+    st.write(leaderboard_df)
     student_leaderboard_df = leaderboard_df[leaderboard_df["ИИН"] == student_id]
 
     if student_leaderboard_df.empty:
