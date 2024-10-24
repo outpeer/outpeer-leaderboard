@@ -188,7 +188,7 @@ if student_id and course:
     hw_chart.add_hline(
         y=hw_avg_score,
         line_dash="dash",
-        line_color="red" if hw_avg_score < hw_avg_score_class else "blue",
+        line_color="red" if hw_avg_score < hw_avg_score_class else "green",
         annotation_text=f"Ваш средний балл: {hw_avg_score:.2f}",
         annotation_position="top right",
     )
