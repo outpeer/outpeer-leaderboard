@@ -182,6 +182,7 @@ if student_id and course:
         category_orders={"type": ["class", "student"]},
         labels={"labels": "Домашние задания", "scores": ""}, 
         title="Ваши домашние задания",
+        barmode="group",
     )
     hw_chart.update_layout(yaxis_range=[0, 100])
     hw_chart.add_hline(
