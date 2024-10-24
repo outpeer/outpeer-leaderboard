@@ -215,7 +215,7 @@ if student_id and course:
         y=attendance_avg_score,
         line_dash="dash",
         line_color="red",
-        annotation_text=f"Средний балл: {attendance_avg_score:.2f}",
+        annotation_text=f"Средняя посещаемость: {100 * attendance_avg_score:.2f}%",
         annotation_position="top right",
     )
 
