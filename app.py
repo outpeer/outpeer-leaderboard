@@ -203,7 +203,7 @@ if student_id and course:
         "dates": [date for date, _ in attendance_data],
         "scores": [score for _, score in attendance_data],
     })
-    attendance_avg_score = sum([score for score in attendance_data["scores"] if not pd.isna(score)]) / len(attendance_data)
+    attendance_avg_score = sum([score for score in attendance_data["scores"] if score is not None]) / len(attendance_data)
 
     attendance_chart = px.bar(
         attendance_data,
