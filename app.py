@@ -24,7 +24,7 @@ def get_connection():
 def pull_data(data_type: str, fetching_date: str):
     print(f"Fetching {data_type} data for {fetching_date}")
     conn = get_connection()
-    dtype_spec = {"ИИН": str}
+    dtype_spec = {"ИИН": str, "Рейтинг": int}
     return {
         course: conn.read(worksheet=f"{data_type} {course} TO24", dtype=dtype_spec)
         for course in COURSES
