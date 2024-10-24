@@ -167,10 +167,26 @@ if student_id and course:
         st.error("Вас нет в лидерборде. Пожалуйста, проверьте правильность ввода ИИН или курса.")
         st.stop()
 
-    display_student_info(student_leaderboard_df)
+    try:
+        display_student_info(student_leaderboard_df)
+    except Exception as e:
+        print(f"Error displaying student info: {e}")
+        st.error("Ошибка при отображении информации о студенте. Пожалуйста, обратитесь к администратору.")
     st.write("---")
-    display_rating_chart(leaderboard_df, student_leaderboard_df)
+    try:
+        display_rating_chart(leaderboard_df, student_leaderboard_df)
+    except Exception as e:
+        print(f"Error displaying rating chart: {e}")
+        st.error("Ошибка при отображении графика рейтинга. Пожалуйста, обратитесь к администратору.")
     st.write("---")
-    display_homework_chart(homework_data[course], student_id)
+    try:
+        display_homework_chart(homework_data[course], student_id)
+    except Exception as e:
+        print(f"Error displaying homework chart: {e}")
+        st.error("Ошибка при отображении графика домашних заданий. Пожалуйста, обратитесь к администратору.")
     st.write("---")
-    display_attendance_chart(attendance_data[course], student_id)
+    try:
+        display_attendance_chart(attendance_data[course], student_id)
+    except Exception as e:
+        print(f"Error displaying attendance chart: {e}")
+        st.error("Ошибка при отображении графика посещаемости. Пожалуйста, обратитесь к администратору.")
