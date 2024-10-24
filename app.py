@@ -161,12 +161,17 @@ if student_id and course:
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
     hw_labels = [str(col[2:]) for col in hw_columns]
     hw_scores = student_homework_df[hw_columns].iloc[0].values
-    hw_avg_score = sum([score for score in hw_scores if not pd.isna(score)]) / count_homeworks
-
+    hw_data = list(zip(hw_labels, hw_scores))
+    hw_data = pd.DataFrame({
+        "labels": [label for label, _ in hw_data],
+        "scores": [score for _, score in hw_data],
+    })
+    hw_avg_score = sum([score for score in hw_data["scores"] if not pd.isna(score)]) / count_homeworks
     hw_chart = px.bar(
-        x=hw_labels, 
-        y=hw_scores, 
-        labels={"x": "Домашние задания", "y": "Баллы"}, 
+        hw_data,
+        x="labels", 
+        y="scores", 
+        labels={"labels": "Домашние задания", "scores": ""}, 
         title="Ваши домашние задания",
     )
     hw_chart.update_layout(yaxis_range=[0, 100])
@@ -206,7 +211,7 @@ if student_id and course:
         attendance_data,
         x="dates",
         y="scores",
-        labels={"x": "Дата", "y": "Баллы"},
+        labels={"dates": "Дата", "scores": ""},
         title="Ваша посещаемость",
     )
 
