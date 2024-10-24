@@ -154,7 +154,10 @@ if student_id and course:
     relevant_homework_df = homework_df[hw_columns].dropna(axis=1, how="all")
     count_homeworks = len(relevant_homework_df.columns)
     hw_avg_score_class = (relevant_homework_df.sum(axis=1) / count_homeworks).mean()
-    hw_avg_scores = relevant_homework_df.mean(axis=0)
+    hw_avg_scores = relevant_homework_df.mean(axis=0).values
+    hw_avg_scores = [
+        hw_avg_score for hw_avg_score in hw_avg_scores
+    ] + [None] * (len(hw_columns) - len(hw_avg_scores))
 
     st.write(hw_avg_scores)
     st.write(hw_avg_scores.values)
