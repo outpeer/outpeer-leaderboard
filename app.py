@@ -154,23 +154,30 @@ if student_id and course:
     relevant_homework_df = homework_df[hw_columns].dropna(axis=1, how="all")
     count_homeworks = len(relevant_homework_df.columns)
     hw_avg_score_class = (relevant_homework_df.sum(axis=1) / count_homeworks).mean()
-    hw_avg_scores = relevant_homework_df.mean(axis=0)
-    st.write(hw_avg_score_class)
-    st.write(hw_avg_scores)
+    hw_avg_scores = relevant_homework_df.mean(axis=0).iloc[0].values
 
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
     hw_labels = [str(col[2:]) for col in hw_columns]
     hw_scores = student_homework_df[hw_columns].iloc[0].values
-    hw_data = list(zip(hw_labels, hw_scores))
-    hw_data = pd.DataFrame({
-        "labels": [label for label, _ in hw_data],
-        "scores": [score for _, score in hw_data],
+    hw_avg_score = sum([score for score in hw_scores if not pd.isna(score)]) / count_homeworks
+    hw_student_data = pd.DataFrame({
+        "labels": hw_labels,
+        "scores": hw_scores,
+        "type": ["student"] * len(hw_labels),
     })
-    hw_avg_score = sum([score for score in hw_data["scores"] if not pd.isna(score)]) / count_homeworks
+    hw_class_data = pd.DataFrame({
+        "labels": hw_labels,
+        "scores": hw_avg_scores,
+        "type": ["class"] * len(hw_labels),
+    })
+    hw_data = pd.concat([hw_class_data, hw_student_data])
     hw_chart = px.bar(
         hw_data,
         x="labels", 
-        y="scores", 
+        y="scores",
+        color="type",
+        color_discrete_map={"student": "blue", "class": "lightgrey"},
+        category_orders={"type": ["class", "student"]},
         labels={"labels": "Домашние задания", "scores": ""}, 
         title="Ваши домашние задания",
     )
@@ -178,8 +185,15 @@ if student_id and course:
     hw_chart.add_hline(
         y=hw_avg_score,
         line_dash="dash",
-        line_color="red",
-        annotation_text=f"Средний балл: {hw_avg_score:.2f}",
+        line_color="red" if hw_avg_score < hw_avg_score_class else "blue",
+        annotation_text=f"Ваш средний балл: {hw_avg_score:.2f}",
+        annotation_position="top right",
+    )
+    hw_chart.add_hline(
+        y=hw_avg_score_class,
+        line_dash="dash",
+        line_color="black",
+        annotation_text=f"Средний балл класса: {hw_avg_score_class:.2f}",
         annotation_position="top right",
     )
     st.plotly_chart(hw_chart)
