@@ -48,7 +48,6 @@ def get_rating_chart(min_score, max_score, student_score, student_rank, total_pa
     fig.update_layout(
         showlegend=False,
         margin=dict(l=20, r=20, t=40, b=20),
-        yaxis=dict(autorange="reversed")
     )
 
     return fig
