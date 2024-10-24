@@ -117,10 +117,6 @@ leaderboard_data = pull_leaderboard_data(fetching_date)
 homework_data = pull_homework_data(fetching_date)
 attendance_data = pull_attendance_data(fetching_date)
 
-if course:
-    attendance_df = attendance_data[course]
-    st.write(attendance_df)
-
 if student_id and course:
     leaderboard_df = leaderboard_data[course]
     student_leaderboard_df = leaderboard_df[leaderboard_df["ИИН"] == student_id]
@@ -155,7 +151,12 @@ if student_id and course:
     homework_df = homework_data[course]
     hw_columns = [col for col in homework_df.columns if col.startswith("HW")]
     # drop columns that have all null values (no homework submitted)
-    count_homeworks = len(homework_df[hw_columns].dropna(axis=1, how="all").columns)
+    relevant_homework_df = homework_df[hw_columns].dropna(axis=1, how="all")
+    class_hw_scores = relevant_homework_df.sum(axis=1)
+    class_hw_avg_score = relevant_homework_df.mean(axis=0)
+    st.write(class_hw_scores)
+    st.write(class_hw_avg_score)
+    count_homeworks = len(relevant_homework_df.columns)
 
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
     hw_labels = [str(col[2:]) for col in hw_columns]
@@ -187,18 +188,13 @@ if student_id and course:
     attendance_df = attendance_data[course]
     col_dates_start_index = attendance_df.columns.get_loc("Week 1")
     student_attendance_df = attendance_df[attendance_df["ИИН"] == student_id]
-    # get first row that contains dates
     lesson_dates = attendance_df.iloc[0][col_dates_start_index:]
     lesson_dates = lesson_dates[lesson_dates.notna()]
     lesson_dates = lesson_dates.tolist()
-    # "05.10.24" -> convert to datetime
     lesson_dates = [datetime.strptime(date, "%d.%m.%y") for date in lesson_dates]
     total_lessons = len(lesson_dates)
-
-    # get attendance scores from student_attendance_df based on col_dates_start_index
     attendance_scores = student_attendance_df.iloc[0][col_dates_start_index:total_lessons+col_dates_start_index+1]
     attendance_scores = attendance_scores.tolist()
-
     attendance_data = list(zip(lesson_dates, attendance_scores))
     attendance_data = pd.DataFrame({
         "dates": [date for date, _ in attendance_data],
@@ -210,7 +206,7 @@ if student_id and course:
         attendance_data,
         x="dates",
         y="scores",
-        labels={"dates": "Дата", "scores": ""},
+        labels={"dates": "Дата уроков", "scores": ""},
         title="Ваша посещаемость",
     )
 
