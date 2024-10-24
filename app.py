@@ -222,7 +222,7 @@ if student_id and course:
         attendance_data,
         x="dates",
         y="scores",
-        labels={"dates": "Дата уроков", "scores": ""},
+        labels={"dates": "Даты уроков", "scores": ""},
         title="Ваша посещаемость",
     )
     attendance_chart.update_layout(yaxis_range=[0, 1.1])
