@@ -221,12 +221,14 @@ if student_id and course:
     })
     attendance_avg_score = sum([score for score in attendance_data["scores"] if not pd.isna(score)]) / len(attendance_data)
 
-    attendance_chart = px.scatter(
+    attendance_chart = px.line(
         attendance_data,
         x="dates",
         y="scores",
         labels={"dates": "Дата уроков", "scores": ""},
         title="Ваша посещаемость",
+        markers=True,
+        marker_size=10,
         symbol="present",
         symbol_map={0: "x", 1: "circle", 0.5: "triangle-up"},
     )
