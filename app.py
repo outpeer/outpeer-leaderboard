@@ -232,7 +232,7 @@ if student_id and course:
         symbol_map={0: "x", 1: "circle", 0.5: "triangle-up"},
     )
     attendance_chart.update_traces(marker=dict(size=10))
-    attendance_chart.update_layout(yaxis_range=[-0.1, 1.2])
+    attendance_chart.update_layout(yaxis_range=[-0.1, 1.01])
     attendance_chart.add_hline(
         y=attendance_avg_score,
         line_dash="solid",
