@@ -117,7 +117,6 @@ attendance_data = pull_attendance_data(fetching_date)
 
 if student_id and course:
     leaderboard_df = leaderboard_data[course]
-    st.write(leaderboard_df)
     student_leaderboard_df = leaderboard_df[leaderboard_df["ИИН"] == student_id]
 
     if student_leaderboard_df.empty:
