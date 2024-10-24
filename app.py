@@ -228,7 +228,7 @@ if student_id and course:
         labels={"dates": "Дата уроков", "scores": ""},
         title="Ваша посещаемость",
         markers=True,
-        symbol="present",
+        symbol="scores",
         symbol_map={0: "x", 1: "circle", 0.5: "triangle-up"},
     )
     attendance_chart.update_traces(marker=dict(size=10))
