@@ -152,11 +152,11 @@ if student_id and course:
     hw_columns = [col for col in homework_df.columns if col.startswith("HW")]
     # drop columns that have all null values (no homework submitted)
     relevant_homework_df = homework_df[hw_columns].dropna(axis=1, how="all")
-    class_hw_scores = relevant_homework_df.sum(axis=1)
-    class_hw_avg_score = relevant_homework_df.mean(axis=0)
-    st.write(class_hw_scores)
-    st.write(class_hw_avg_score)
     count_homeworks = len(relevant_homework_df.columns)
+    student_hw_avg_scores = relevant_homework_df.sum(axis=1) / count_homeworks
+    hw_avg_scores = relevant_homework_df.mean(axis=0)
+    st.write(student_hw_avg_scores)
+    st.write(hw_avg_scores)
 
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
     hw_labels = [str(col[2:]) for col in hw_columns]
