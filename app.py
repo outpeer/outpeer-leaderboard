@@ -127,9 +127,9 @@ if student_id and course:
     name_english = student_leaderboard_df["ФИО на латинице"].values[0]
 
     if name_english != "":
-        st.subheader(f"{name_russian} ({name_english}). ")
+        st.subheader(f"{name_russian} ({name_english})")
     else:
-        st.subheader(f"{name_russian}. ")
+        st.subheader(f"{name_russian}")
     
     st.write("---")
     max_leaderboard_score = leaderboard_df["Total score"].max()
