@@ -161,9 +161,6 @@ if student_id and course:
     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
     hw_labels = [str(col[2:]) for col in hw_columns]
     hw_scores = student_homework_df[hw_columns].iloc[0].values
-    st.write(hw_scores)
-    st.write([score for score in hw_scores if not pd.isna(score)])
-    st.write(sum([score for score in hw_scores if not pd.isna(score)]))
     hw_avg_score = sum([score for score in hw_scores if not pd.isna(score)]) / count_homeworks
 
     hw_chart = px.bar(
@@ -203,7 +200,7 @@ if student_id and course:
         "dates": [date for date, _ in attendance_data],
         "scores": [score for _, score in attendance_data],
     })
-    attendance_avg_score = sum([score for score in attendance_data["scores"] if score is not None]) / len(attendance_data)
+    attendance_avg_score = sum([score for score in attendance_data["scores"] if not pd.isna(score)]) / len(attendance_data)
 
     attendance_chart = px.bar(
         attendance_data,
