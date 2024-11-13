@@ -184,7 +184,7 @@ def display_attendance_chart(attendance_df, student_id):
     # avg_score = sum([score for score in scores if not pd.isna(score)]) / len(scores)
     avg_score = attendance_df.loc[attendance_df["ИИН"] == student_id, "Процент посещения за пройденные уроки"].iloc[0]
 
-    class_avg_score = attendance_df["Процент посещения за пройденные уроки"].mean()
+    class_avg_score = attendance_df["Процент посещения за пройденные уроки"].mean() * 100
     
     chart = px.bar(
         data,
