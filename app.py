@@ -121,7 +121,7 @@ def display_attendance_chart(attendance_df, student_id):
     lesson_dates = attendance_df.iloc[0][dates_start_index:]
     lesson_dates = [datetime.strptime(date, "%d.%m.%y") for date in lesson_dates[lesson_dates.notna()].tolist()]
     scores = student_attendance_df.iloc[0][dates_start_index:dates_start_index+len(lesson_dates)].tolist()
-    passed_lessons = homework_df["Кол-во пройденных занятий"].tolist()
+    passed_lessons = attendance_df.loc[attendance_df["ИИН"] == student_id, "Кол-во пройденных занятий"].iloc[0]
 
     data = pd.DataFrame({
         "dates": lesson_dates,
