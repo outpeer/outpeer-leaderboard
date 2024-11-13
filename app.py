@@ -117,7 +117,7 @@ def display_rating_chart(leaderboard_df, student_leaderboard_df):
 
 def display_homework_chart(homework_df, student_id): 
     # Filter columns that start with "HW" or "Quiz"
-    hw_quiz_columns = [col for col in homework_df.columns if col.startswith("HW") or col.startswith("Quiz")]
+    hw_quiz_columns = [col for col in homework_df.columns if col.startswith("HW") or col.startswith("Quiz") or col.startswith("Летучка")]
     completed_homework_df = homework_df[hw_quiz_columns].dropna(axis=1, how="all")
     count_homeworks = len(completed_homework_df.columns)
     
