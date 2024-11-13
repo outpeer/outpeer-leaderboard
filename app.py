@@ -195,7 +195,7 @@ def display_attendance_chart(attendance_df, student_id):
         y=avg_score,
         line_dash="solid",
         line_color="red",
-        annotation_text=f"Средняя посещаемость: {100 * avg_score:.0f}%",
+        annotation_text=f"Ваша средняя посещаемость: {100 * avg_score:.0f}%",
         annotation_position="top right",
     )
     st.plotly_chart(chart)
