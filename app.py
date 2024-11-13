@@ -133,7 +133,7 @@ def display_attendance_chart(attendance_df, student_id):
         data,
         x="dates", y="scores",
         labels={"dates": "Даты уроков", "scores": ""},
-        title=f"Ваша посещаемость за пройденные {len(passed_lessons)} урока/ов",
+        title=f"Ваша посещаемость за пройденные {passed_lessons} урока/ов",
     )
     chart.update_layout(yaxis_range=[0, 1.1])
     chart.add_hline(
