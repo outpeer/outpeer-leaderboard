@@ -193,7 +193,7 @@ def display_attendance_chart(attendance_df, student_id):
     chart.update_layout(yaxis_range=[0, 1.1])
     chart.add_hline(
         y=avg_score,
-        line_dash="solid",
+        line_dash="dash",
         line_color="red",
         annotation_text=f"Ваша средняя посещаемость: {100 * avg_score:.0f}%",
         annotation_position="top right",
