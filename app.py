@@ -121,8 +121,6 @@ def display_attendance_chart(attendance_df, student_id):
     lesson_dates = attendance_df.iloc[0][dates_start_index:]
     lesson_dates = [datetime.strptime(date, "%d.%m.%y") for date in lesson_dates[lesson_dates.notna()].tolist()]
     scores = student_attendance_df.iloc[0][dates_start_index:dates_start_index+len(lesson_dates)].tolist()
-    passed_lessons = attendance_df["Кол-во пройденных занятий"].values
-
 
     data = pd.DataFrame({
         "dates": lesson_dates,
@@ -134,7 +132,7 @@ def display_attendance_chart(attendance_df, student_id):
         data,
         x="dates", y="scores",
         labels={"dates": "Даты уроков", "scores": ""},
-        title=f"Ваша посещаемость за пройденные {passed_lessons} урока/ов",
+        title=f"Ваша посещаемость за пройденные {len(lesson_dates)} урока/ов",
     )
     chart.update_layout(yaxis_range=[0, 1.1])
     chart.add_hline(
