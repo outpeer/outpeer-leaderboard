@@ -183,6 +183,8 @@ def display_attendance_chart(attendance_df, student_id):
     })
     # avg_score = sum([score for score in scores if not pd.isna(score)]) / len(scores)
     avg_score = attendance_df.loc[attendance_df["ИИН"] == student_id, "Процент посещения за пройденные уроки"].iloc[0]
+
+    class_avg_score = attendance_df["Процент посещения за пройденные уроки"].mean()
     
     chart = px.bar(
         data,
@@ -197,6 +199,13 @@ def display_attendance_chart(attendance_df, student_id):
         line_color="red",
         annotation_text=f"Ваша средняя посещаемость: {100 * avg_score:.0f}%",
         annotation_position="top right",
+    )
+    chart.add_hline(
+        y=class_avg_score / 100,  # Assuming "Процент посещения за пройденные уроки" is a percentage
+        line_dash="dash",
+        line_color="blue",
+        annotation_text=f"Средняя посещаемость класса: {class_avg_score:.0f}%",
+        annotation_position="bottom right",
     )
     st.plotly_chart(chart)
 
