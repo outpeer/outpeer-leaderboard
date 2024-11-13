@@ -71,7 +71,7 @@ def display_rating_chart(leaderboard_df, student_leaderboard_df):
     st.plotly_chart(chart)
 
 def display_homework_chart(homework_df, student_id):
-    hw_columns = [col for col in homework_df.columns if col[:2] in ["HW", "Quiz"]]
+    hw_columns = [col for col in homework_df.columns if col.startswith("HW")]
     completed_homework_df = homework_df[hw_columns].dropna(axis=1, how="all")
     count_homeworks = len(completed_homework_df.columns)
     
