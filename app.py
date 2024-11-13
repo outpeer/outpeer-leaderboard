@@ -181,8 +181,9 @@ def display_attendance_chart(attendance_df, student_id):
         "dates": lesson_dates,
         "scores": scores,
     })
-    avg_score = sum([score for score in scores if not pd.isna(score)]) / len(scores)
-
+    # avg_score = sum([score for score in scores if not pd.isna(score)]) / len(scores)
+    avg_score = attendance_df.loc[attendance_df["ИИН"] == student_id, "Процент посещения за пройденные уроки"].iloc[0]
+    
     chart = px.bar(
         data,
         x="dates", y="scores",
@@ -191,7 +192,7 @@ def display_attendance_chart(attendance_df, student_id):
     )
     chart.update_layout(yaxis_range=[0, 1.1])
     chart.add_hline(
-        y=avg_score,
+        y=avg_score / 100,
         line_dash="solid",
         line_color="red",
         annotation_text=f"Средняя посещаемость: {100 * avg_score:.0f}%",
