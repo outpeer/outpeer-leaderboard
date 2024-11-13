@@ -70,86 +70,32 @@ def display_rating_chart(leaderboard_df, student_leaderboard_df):
         st.snow()
     st.plotly_chart(chart)
 
-def display_homework_chart(homework_df, student_id):
-    hw_columns = [col for col in homework_df.columns if (col.startswith("HW") or col.startswith("Quiz"))]
-    completed_homework_df = homework_df[hw_columns].dropna(axis=1, how="all")
-    count_homeworks = len(completed_homework_df.columns)
-    
-    avg_score_across_class = (completed_homework_df.sum(axis=1) / count_homeworks).mean()
-    avg_score_per_homework = completed_homework_df.mean(axis=0).values
-    avg_score_per_homework = [*avg_score_per_homework, *[None] * (len(hw_columns) - len(avg_score_per_homework))]
-
-    student_homework_df = homework_df[homework_df["ИИН"] == student_id]
-    labels = [str(col[2:]) for col in hw_columns]
-    scores = student_homework_df[hw_columns].iloc[0].values
-    avg_score = sum([score for score in scores if not pd.isna(score)]) / count_homeworks
-
-    data = pd.concat([
-        pd.DataFrame({"labels": labels, "scores": avg_score_per_homework, "type": ["Класс"] * len(labels)}),
-        pd.DataFrame({"labels": labels, "scores": scores, "type": ["Ваш балл"] * len(labels)})
-    ])
-
-    chart = px.bar(
-        data,
-        x="labels", y="scores", color="type",
-        color_discrete_map={"Ваш балл": "blue", "Класс": "lightgrey"},
-        category_orders={"type": ["Класс", "Ваш балл"]},
-        labels={"labels": "Домашние задания", "scores": "", "type": "Класс/Ваш балл"}, 
-        title="Ваши домашние задания",
-        barmode="group",
-    )
-    chart.update_layout(yaxis_range=[0, 100])
-    chart.add_hline(
-        y=avg_score,
-        line_dash="dash",
-        line_color="red" if avg_score < avg_score_across_class else "green",
-        annotation_text=f"Ваш средний балл: {avg_score:.2f}",
-        annotation_position="top right",
-    )
-    chart.add_hline(
-        y=avg_score_across_class,
-        line_dash="dash",
-        line_color="black",
-        annotation_text=f"Средний балл класса: {avg_score_across_class:.2f}",
-        annotation_position="top right",
-    )
-    st.plotly_chart(chart)
-
-# def display_homework_chart(homework_df, student_id): 
-#     # Filter columns that start with "HW" or "Quiz"
-#     hw_quiz_columns = [col for col in homework_df.columns if col.startswith("HW") or col.startswith("Quiz")]
-#     completed_homework_df = homework_df[hw_quiz_columns].dropna(axis=1, how="all")
+# def display_homework_chart(homework_df, student_id):
+#     hw_columns = [col for col in homework_df.columns if (col.startswith("HW") or col.startswith("Quiz"))]
+#     completed_homework_df = homework_df[hw_columns].dropna(axis=1, how="all")
 #     count_homeworks = len(completed_homework_df.columns)
     
-#     # Compute average scores across the class
-#     avg_score_across_class = (completed_homework_df.sum(axis=1) / count_homeworks).mean() if count_homeworks > 0 else 0
+#     avg_score_across_class = (completed_homework_df.sum(axis=1) / count_homeworks).mean()
 #     avg_score_per_homework = completed_homework_df.mean(axis=0).values
-#     avg_score_per_homework = [*avg_score_per_homework, *[None] * (len(hw_quiz_columns) - len(avg_score_per_homework))]
+#     avg_score_per_homework = [*avg_score_per_homework, *[None] * (len(hw_columns) - len(avg_score_per_homework))]
 
-#     # Get student scores
 #     student_homework_df = homework_df[homework_df["ИИН"] == student_id]
-#     labels = [str(col) for col in hw_quiz_columns]  # Adjust labels if needed for better display
-#     if not student_homework_df.empty:
-#         scores = student_homework_df[hw_quiz_columns].iloc[0].values
-#         avg_score = sum([score for score in scores if not pd.isna(score)]) / count_homeworks if count_homeworks > 0 else 0
-#     else:
-#         scores = [0] * len(hw_quiz_columns)
-#         avg_score = 0
+#     labels = [str(col[2:]) for col in hw_columns]
+#     scores = student_homework_df[hw_columns].iloc[0].values
+#     avg_score = sum([score for score in scores if not pd.isna(score)]) / count_homeworks
 
-#     # Prepare data for charting
 #     data = pd.concat([
 #         pd.DataFrame({"labels": labels, "scores": avg_score_per_homework, "type": ["Класс"] * len(labels)}),
 #         pd.DataFrame({"labels": labels, "scores": scores, "type": ["Ваш балл"] * len(labels)})
 #     ])
 
-#     # Plot the chart
 #     chart = px.bar(
 #         data,
 #         x="labels", y="scores", color="type",
 #         color_discrete_map={"Ваш балл": "blue", "Класс": "lightgrey"},
 #         category_orders={"type": ["Класс", "Ваш балл"]},
 #         labels={"labels": "Домашние задания", "scores": "", "type": "Класс/Ваш балл"}, 
-#         title="Ваши домашние задания и квизы",
+#         title="Ваши домашние задания",
 #         barmode="group",
 #     )
 #     chart.update_layout(yaxis_range=[0, 100])
@@ -168,6 +114,60 @@ def display_homework_chart(homework_df, student_id):
 #         annotation_position="top right",
 #     )
 #     st.plotly_chart(chart)
+
+def display_homework_chart(homework_df, student_id): 
+    # Filter columns that start with "HW" or "Quiz"
+    hw_quiz_columns = [col for col in homework_df.columns if col.startswith("HW") or col.startswith("Quiz")]
+    completed_homework_df = homework_df[hw_quiz_columns].dropna(axis=1, how="all")
+    count_homeworks = len(completed_homework_df.columns)
+    
+    # Compute average scores across the class
+    avg_score_across_class = (completed_homework_df.sum(axis=1) / count_homeworks).mean() if count_homeworks > 0 else 0
+    avg_score_per_homework = completed_homework_df.mean(axis=0).values
+    avg_score_per_homework = [*avg_score_per_homework, *[None] * (len(hw_quiz_columns) - len(avg_score_per_homework))]
+
+    # Get student scores
+    student_homework_df = homework_df[homework_df["ИИН"] == student_id]
+    labels = [str(col) for col in hw_quiz_columns]  # Adjust labels if needed for better display
+    if not student_homework_df.empty:
+        scores = student_homework_df[hw_quiz_columns].iloc[0].values
+        avg_score = sum([score for score in scores if not pd.isna(score)]) / count_homeworks if count_homeworks > 0 else 0
+    else:
+        scores = [0] * len(hw_quiz_columns)
+        avg_score = 0
+
+    # Prepare data for charting
+    data = pd.concat([
+        pd.DataFrame({"labels": labels, "scores": avg_score_per_homework, "type": ["Класс"] * len(labels)}),
+        pd.DataFrame({"labels": labels, "scores": scores, "type": ["Ваш балл"] * len(labels)})
+    ])
+
+    # Plot the chart
+    chart = px.bar(
+        data,
+        x="labels", y="scores", color="type",
+        color_discrete_map={"Ваш балл": "blue", "Класс": "lightgrey"},
+        category_orders={"type": ["Класс", "Ваш балл"]},
+        labels={"labels": "Домашние задания", "scores": "", "type": "Класс/Ваш балл"}, 
+        title="Ваши домашние задания и квизы",
+        barmode="group",
+    )
+    chart.update_layout(yaxis_range=[0, 100])
+    chart.add_hline(
+        y=avg_score,
+        line_dash="dash",
+        line_color="red" if avg_score < avg_score_across_class else "green",
+        annotation_text=f"Ваш средний балл: {avg_score:.2f}",
+        annotation_position="top right",
+    )
+    chart.add_hline(
+        y=avg_score_across_class,
+        line_dash="dash",
+        line_color="black",
+        annotation_text=f"Средний балл класса: {avg_score_across_class:.2f}",
+        annotation_position="top right",
+    )
+    st.plotly_chart(chart)
 
 def display_attendance_chart(attendance_df, student_id):
     dates_start_index = attendance_df.columns.get_loc("Week 1")
