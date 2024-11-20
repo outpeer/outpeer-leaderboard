@@ -5,14 +5,14 @@ from datetime import datetime
 from streamlit_gsheets import GSheetsConnection
 
 # Constants
-COURSES = ["DS", "DA", "PE", "AI", "DS Oct24", "DA2 Oct24"]
+COURSES = ["DS", "DA", "PE", "AI", "DS Oct24", "DA Oct24"]
 COURSE_LABELS = {
     "DS": "Data Science",
     "DA": "Data Analytics",
     "PE": "Python Engineering",
     "AI": "AI Engineering",
     "DS Oct24": "Data Science 2.0"
-    "DA2 Oct24": "Data Analytics 2.0"
+    "DA Oct24": "Data Analytics 2.0"
 }
 
 # Setup
@@ -28,8 +28,14 @@ def pull_data(data_type: str, fetching_date: str):
     conn = get_connection()
     dtype_spec = {"ИИН": str}
     return {
-        course: conn.read(worksheet=f"{data_type} {course} TO24", dtype=dtype_spec)
-        for course in COURSES
+        for course in COURSES:
+            try: 
+                course: conn.read(worksheet=f"{data_type} {course} TO24", dtype=dtype_spec)
+            except:
+                try:
+                    course: conn.read(worksheet=f"{data_type} {course}", dtype=dtype_spec)
+                except:
+                    course_data = None
     }
 
 def get_rating_chart(min_score, max_score, student_score, student_rank, total_participants):
