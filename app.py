@@ -154,7 +154,7 @@ def display_homework_chart(homework_df, student_id):
         title="Ваши домашние задания и квизы",
         barmode="group",
     )
-    chart.update_layout(yaxis_range=[0, 100])
+    chart.update_layout(yaxis_range=[0, 120])
     chart.add_hline(
         y=avg_score,
         line_dash="dash",
