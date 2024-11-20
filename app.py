@@ -5,14 +5,14 @@ from datetime import datetime
 from streamlit_gsheets import GSheetsConnection
 
 # Constants
-COURSES = ["DS", "DA", "PE", "AI", "DS Oct24", "DA Oct24"]
+COURSES = ["DS", "DA", "PE", "AI"]
 COURSE_LABELS = {
     "DS": "Data Science",
     "DA": "Data Analytics",
     "PE": "Python Engineering",
-    "AI": "AI Engineering",
-    "DS Oct24": "Data Science 2.0",
-    "DA Oct24": "Data Analytics 2.0"
+    "AI": "AI Engineering"
+    # "DS Oct24": "Data Science 2.0",
+    # "DA Oct24": "Data Analytics 2.0"
 }
 
 # Setup
