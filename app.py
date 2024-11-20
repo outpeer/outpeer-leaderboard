@@ -10,7 +10,7 @@ COURSE_LABELS = {
     "DS": "Data Science",
     "DA": "Data Analytics",
     "PE": "Python Engineering",
-    "AI": "AI Engineering",
+    "AI": "AI Engineering"
     "DS Oct24": "Data Science 2.0",
     "DA Oct24": "Data Analytics 2.0"
 }
@@ -28,7 +28,7 @@ def pull_data(data_type: str, fetching_date: str):
     conn = get_connection()
     dtype_spec = {"ИИН": str}
     return {
-        course: conn.read(worksheet=f"{data_type} {course} TO24", dtype=dtype_spec) or conn.read(worksheet=f"{data_type} {course}", dtype=dtype_spec)
+        course: conn.read(worksheet=f"{data_type} {course} TO24", dtype=dtype_spec)
         for course in COURSES
     }
 
