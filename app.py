@@ -5,14 +5,14 @@ from datetime import datetime
 from streamlit_gsheets import GSheetsConnection
 
 # Constants
-COURSES = ["DS", "DA", "PE", "AI", "DS", "DA"]
+COURSES = ["DS", "DA", "PE", "AI", "DS Oct24", "DA Oct24"]
 COURSE_LABELS = {
     "DS": "Data Science",
     "DA": "Data Analytics",
     "PE": "Python Engineering",
     "AI": "AI Engineering",
-    "DS": "Data Science Oct24"
-    "DA": "Data Analytics Oct24"
+    "DS Oct24": "Data Science 2.0",
+    "DA Oct24": "Data Analytics 2.0"
 }
 
 # Setup
@@ -31,7 +31,7 @@ def pull_data(data_type: str, fetching_date: str):
         course: (
             conn.read(worksheet=f"{data_type} {course} TO24", dtype=dtype_spec)
             if conn.worksheet_exists(f"{data_type} {course} TO24")
-            else conn.read(worksheet=f"{data_type} {course} Oct24", dtype=dtype_spec)
+            else conn.read(worksheet=f"{data_type} {course}", dtype=dtype_spec)
             if conn.worksheet_exists(f"{data_type} {course}")
             else None
         )
