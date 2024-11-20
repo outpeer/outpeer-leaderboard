@@ -10,7 +10,7 @@ COURSE_LABELS = {
     "DS": "Data Science",
     "DA": "Data Analytics",
     "PE": "Python Engineering",
-    "AI": "AI Engineering"
+    "AI": "AI Engineering",
     "DS Oct24": "Data Science 2.0",
     "DA Oct24": "Data Analytics 2.0"
 }
